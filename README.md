@@ -1,3 +1,3 @@
 # forum
 
-A REST API implemented with flask 
+A REST API implemented with python flask framework 
