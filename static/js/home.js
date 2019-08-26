@@ -15,8 +15,8 @@ ns.model = (function() {
     return {
         done: function(word) {
             let ajax_options = {
-                type: 'POST',
-                url: 'api/echo',
+                type: 'GET',
+                url: 'api/echo/' + word,
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
@@ -27,41 +27,6 @@ ns.model = (function() {
             $.ajax(ajax_options)
             .done(function(data) {
                 $event_pump.trigger('model_create_success', [data]);
-            })
-            .fail(function(xhr, textStatus, errorThrown) {
-                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
-            })
-        },
-        update: function(fname, lname) {
-            let ajax_options = {
-                type: 'PUT',
-                url: 'api/people/' + lname,
-                accepts: 'application/json',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    'fname': fname,
-                    'lname': lname
-                })
-            };
-            $.ajax(ajax_options)
-            .done(function(data) {
-                $event_pump.trigger('model_update_success', [data]);
-            })
-            .fail(function(xhr, textStatus, errorThrown) {
-                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
-            })
-        },
-        'delete': function(lname) {
-            let ajax_options = {
-                type: 'DELETE',
-                url: 'api/people/' + lname,
-                accepts: 'application/json',
-                contentType: 'plain/text'
-            };
-            $.ajax(ajax_options)
-            .done(function(data) {
-                $event_pump.trigger('model_delete_success', [data]);
             })
             .fail(function(xhr, textStatus, errorThrown) {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
@@ -85,19 +50,14 @@ ns.view = (function() {
         update_editor: function(word) {
             $word.val(word).focus();
         },
-        build_table: function(people) {
+        build_table: function(word) {            
             let rows = ''
 
             // clear the table
             $('.people table > tbody').empty();
 
-            // did we get a people array?
-            if (people) {
-                for (let i=0, l=people.length; i < l; i++) {
-                    rows += `<tr><td class="fname">${people[i].fname}</td><td class="lname">${people[i].lname}</td><td>${people[i].timestamp}</td></tr>`;
-                }
-                $('table > tbody').append(rows);
-            }
+            rows = `<tr><td class="word">${word.msg}</td></tr>`;
+            $('table > tbody').append(rows);
         },
         error: function(error_msg) {
             $('.error')
@@ -117,13 +77,7 @@ ns.controller = (function(m, v) {
     let model = m,
         view = v,
         $event_pump = $('body'),
-        $fname = $('#fname'),
-        $lname = $('#lname');
-
-    // Get the data from the model after the controller is done initializing
-    setTimeout(function() {
-        //model.read();
-    }, 100)
+        $word = $('#word');
 
     // Validate input
     function validate(word) {
@@ -137,7 +91,7 @@ ns.controller = (function(m, v) {
         e.preventDefault();
 
         if (validate(word)) {
-            model.create(word)
+            model.done(word)
         } else {
             alert('Problem with word input');
         }
@@ -166,21 +120,9 @@ ns.controller = (function(m, v) {
     });
 
     // Handle the model events
-    $event_pump.on('model_read_success', function(e, data) {
+    $event_pump.on('model_create_success', function(e, data) {
         view.build_table(data);
         view.reset();
-    });
-
-    $event_pump.on('model_create_success', function(e, data) {
-        model.read();
-    });
-
-    $event_pump.on('model_update_success', function(e, data) {
-        model.read();
-    });
-
-    $event_pump.on('model_delete_success', function(e, data) {
-        model.read();
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {
