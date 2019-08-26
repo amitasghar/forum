@@ -1,1 +1,4 @@
 __pycache__/
+node_modules
+cypress/integration/examples
+cypress/videos
