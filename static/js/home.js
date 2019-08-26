@@ -56,7 +56,7 @@ ns.view = (function() {
             // clear the table
             $('.people table > tbody').empty();
 
-            rows = `<tr><td class="word">${word.msg}</td></tr>`;
+            rows = `<tr><td class="word" id="firstword">${word.msg}</td></tr>`;
             $('table > tbody').append(rows);
         },
         error: function(error_msg) {
