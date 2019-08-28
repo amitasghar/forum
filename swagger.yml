@@ -30,6 +30,34 @@ paths:
           description: echo the word
           schema:
             type: string
+
+  /message:
+    get:
+      operationId: forum.read_all
+      tags:
+        - forum
+      summary: Read the entire set of messages
+      description: Read the entire set of messages
+      responses:
+        200:
+          description: read messages
+          schema:
+            type: array
+            items:
+              properties:
+                message_id:
+                  type: string
+                  description: Id of the message
+                name:
+                  type: string
+                  description: name of the person
+                text_entry:
+                  type: string
+                  description: Content of messaqge
+                timestamp:
+                  type: string
+                  description: Creation timestamp of the message
+
   /health:
     get:
       tags: [Health]
