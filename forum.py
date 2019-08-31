@@ -14,7 +14,7 @@ def read_all():
 
     # Serialize the data for the response
     message_schema = MessageSchema(many=True)
-    data = message_schema.dump(message).data
+    data = message_schema.dump(message)
     return data
 
 def echo(word):
