@@ -10,6 +10,10 @@ pip install Flask-SQLAlchemy flask-marshmallow marshmallow-sqlalchemy marshmallo
 
 #### downgrade SQLALchemy -
 pip show Flask-SQLAlchemy
+
 pip uninstall Flask-SQLAlchemy
+
 pip install Flask-SQLAlchemy==2.1
+
 pip show Flask-SQLAlchemy
+
