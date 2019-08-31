@@ -13,15 +13,51 @@ ns.model = (function() {
 
     // Return the API
     return {
-        done: function(word) {
+        'read': function() {
             let ajax_options = {
                 type: 'GET',
-                url: 'api/echo/' + word,
+                url: 'api/message',
+                accepts: 'application/json',
+                dataType: 'json'
+            };
+            $.ajax(ajax_options)
+            .done(function(data) {
+                $event_pump.trigger('model_read_success', [data]);
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
+            })
+        },     
+        create: function(post) {
+            let ajax_options = {
+                type: 'POST',
+                url: 'api/message',
+                accepts: 'application/json',
+                contentType: 'application/json',
+                dataType: 'json',
+                //data: JSON.stringify(post)
+                data: JSON.stringify({
+                    'name': 'dsdf',
+                    'text_entry': 'bbbb'
+                })
+            };
+            $.ajax(ajax_options)
+            .done(function(data) {
+                $event_pump.trigger('model_create_success', [data]);
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
+            })
+        },           
+        done: function(message_text) {
+            let ajax_options = {
+                type: 'GET',
+                url: 'api/echo/' + message_text,
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    'word': word
+                    'word': post
                 })
             };
             $.ajax(ajax_options)
@@ -39,25 +75,40 @@ ns.model = (function() {
 ns.view = (function() {
     'use strict';
 
-    let $word = $('#word');
+    let $message_id = $('#message_id'),
+        $name = $('#name'),
+        $post = $('#post');   
 
     // return the API
     return {
         reset: function() {
-            $word.val('');
-            $word.val('').focus();
+            $message_id.val('');
+            $name.val('');
+            $post.val('');
+            $name.val('').focus();
         },
-        update_editor: function(word) {
-            $word.val(word).focus();
+        update_editor: function(post) {
+            $message_id.val(post.message_id);
+            $name.val(post.name);            
+            $message_text.val(post.message_text).focus();
         },
-        build_table: function(word) {            
+        build_table: function(message) {            
             let rows = ''
 
             // clear the table
-            $('.people table > tbody').empty();
+            $('.message table > tbody').empty();
 
-            rows = `<tr><td class="word" id="firstword">${word.msg}</td></tr>`;
-            $('table > tbody').append(rows);
+            // did we get a message array?
+            if (message) {
+                for (let i=0, l=message.length; i < l; i++) {
+                    rows += `<tr data-person-id="${message[i].message_id}">
+                        <td class="name">${message[i].name}</td>
+                        <td class="text_entry">${message[i].text_entry}</td>
+                        <td>${message[i].timestamp}</td>
+                    </tr>`;
+                }
+                $('table > tbody').append(rows);
+            }
         },
         error: function(error_msg) {
             $('.error')
@@ -77,24 +128,47 @@ ns.controller = (function(m, v) {
     let model = m,
         view = v,
         $event_pump = $('body'),
-        $word = $('#word');
+        $message_id = $('#message_id'),
+        $name = $('#name'),
+        $post = $('#post');
+
+    // Get the data from the model after the controller is done initializing
+    setTimeout(function() {
+        model.read();
+    }, 100)        
 
     // Validate input
-    function validate(word) {
-        return word !== "";
+    function validate(name, message_text) {
+        console.log(name + "----" + message_text)
+        return name !== "" && message_text !== "";
     }
 
     // Create our event handlers
     $('#done').click(function(e) {
-        let word = $word.val();
+        let message_text = $post.val();
 
         e.preventDefault();
 
-        if (validate(word)) {
-            model.done(word)
+        if (validate(message_text)) {
+            model.done(message_text)
         } else {
             alert('Problem with word input');
         }
+    });        
+    // Create our event handlers
+    $('#create').click(function(e) {
+        let message_text = $post.val();
+
+        e.preventDefault();
+
+        if (validate("name", message_text)) {
+            model.create({
+                'name': 'default_name',
+                'message_text': message_text,
+            })
+        } else {
+            alert('Problem with message post input');
+        }        
     });
 
     $('#reset').click(function() {
@@ -103,23 +177,24 @@ ns.controller = (function(m, v) {
 
     $('table > tbody').on('dblclick', 'tr', function(e) {
         let $target = $(e.target),
-            fname,
-            lname;
+            message_id,
+            name,
+            text_entry;
 
-        fname = $target
+        name = $target
             .parent()
             .find('td.fname')
             .text();
 
-        lname = $target
-            .parent()
-            .find('td.lname')
-            .text();
-
-        view.update_editor(fname, lname);
+        view.update_editor(name);
     });
 
     // Handle the model events
+    $event_pump.on('model_read_success', function(e, data) {
+        view.build_table(data);
+        view.reset();
+    });
+
     $event_pump.on('model_create_success', function(e, data) {
         view.build_table(data);
         view.reset();

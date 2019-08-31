@@ -30,7 +30,6 @@ paths:
           description: echo the word
           schema:
             type: string
-
   /message:
     get:
       operationId: forum.read_all
@@ -53,11 +52,47 @@ paths:
                   description: name of the person
                 text_entry:
                   type: string
-                  description: Content of messaqge
+                  description: Content of message
                 timestamp:
                   type: string
                   description: Creation timestamp of the message
-
+    post:
+      operationId: forum.create
+      tags:
+        - forum
+      summary: Create a post
+      description: Create a new post
+      parameters:
+        - name: post
+          in: body
+          description: post to create
+          required: True
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: name of person
+              text_entry:
+                type: string
+                description: body of post
+      responses:
+        201:
+          description: Successfully created post
+          schema:
+            properties:
+              person_id:
+                type: string
+                description: Id of the post
+              name:
+                type: string
+                description: name of the person
+              text_entry:
+                type: string
+                description: message body
+              timestamp:
+                type: string
+                description: Creation/Update timestamp of the post
   /health:
     get:
       tags: [Health]

@@ -17,6 +17,28 @@ def read_all():
     data = message_schema.dump(message)
     return data
 
+def create(post):
+    """
+    This function creates a new post in the forum
+    :param post:  post containing user name and message
+    :return:        201 on success
+    """
+    #name = "default_user" # hardcode user name for now
+    #text = post.get("text_entry")
+
+    # Create a message instance using the schema and the passed in post
+    schema = MessageSchema()
+    new_post = schema.load(post, session=db.session)
+
+    # Add the post to the database
+    db.session.add(new_post)
+    db.session.commit()
+
+    # Serialize and return the newly created post in the response
+    data = schema.dump(new_post)
+
+    return data, 201
+
 def echo(word):
     return {'msg': word}, 200    
 
