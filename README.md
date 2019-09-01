@@ -16,3 +16,8 @@ pip install Flask-SQLAlchemy==2.1
 pip show Flask-SQLAlchemy
 ```
 
+## Testing
+
+runtests.bat - execute Cypress test
+
+(Unit tests using pytest were removed in favour of Cypress - Reason: since we are using SQLAlchemy for ORM, Integration tests make more sense)
