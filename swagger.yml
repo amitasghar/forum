@@ -12,24 +12,69 @@ basePath: /api
 
 # Paths supported by the server application
 paths:
-  /echo/{word}:
+  /message:
     get:
-      operationId: forum.echo
+      operationId: forum.read_all
       tags:
         - forum
-      summary: return the text that is passed
-      description: echo text
-      parameters:
-        - name: word
-          in: path
-          type: string
-          description: input word
-          required: true
+      summary: Read the entire set of messages
+      description: Read the entire set of messages
       responses:
         200:
-          description: echo the word
+          description: read messages
           schema:
-            type: string
+            type: array
+            items:
+              properties:
+                message_id:
+                  type: string
+                  description: Id of the message
+                name:
+                  type: string
+                  description: name of the person
+                text_entry:
+                  type: string
+                  description: Content of message
+                timestamp:
+                  type: string
+                  description: Creation timestamp of the message
+    post:
+      operationId: forum.create
+      tags:
+        - forum
+      summary: Create a post
+      description: Create a new post
+      parameters:
+        - name: post
+          in: body
+          description: post to create
+          required: True
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: name of person
+              text_entry:
+                type: string
+                description: body of post
+      responses:
+        201:
+          description: Successfully created post
+          schema:
+            properties:
+              person_id:
+                type: string
+                description: Id of the post
+              name:
+                type: string
+                description: name of the person
+              text_entry:
+                type: string
+                description: message body
+              timestamp:
+                type: string
+                description: Creation/Update timestamp of the post
   /health:
     get:
       tags: [Health]

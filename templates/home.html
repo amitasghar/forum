@@ -15,17 +15,21 @@
     <div class="container">
         <h1 class="banner">Forum Page</h1>
         <div class="section editor">
-            <label for="word">Text
-                <input id="word" type="text" />
+            <input id="message_id" type="hidden" value="" />
+            <input id="name" type="hidden" value="" />
+            <label for="post">Text
+                <input id="post" type="text" />
             </label>
-            <button id="done">Done</button>
+            <button id="create">Post</button>
         </div>
-        <div class="words">
+        <div class="message">
             <table>
-                <caption>Echo Word Table</caption>
+                <caption>Forum Posts</caption>
                 <thead>
                     <tr>
-                        <th>Word Sent</th>
+                        <th>Name</th>
+                        <th>Post</th>
+                        <th>Update Time</th>
                     </tr>
                 </thead>
                 <tbody>
