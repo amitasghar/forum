@@ -35,30 +35,7 @@ ns.model = (function() {
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
-                //data: JSON.stringify(post)
-                data: JSON.stringify({
-                    'name': 'dsdf',
-                    'text_entry': 'bbbb'
-                })
-            };
-            $.ajax(ajax_options)
-            .done(function(data) {
-                $event_pump.trigger('model_create_success', [data]);
-            })
-            .fail(function(xhr, textStatus, errorThrown) {
-                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
-            })
-        },           
-        done: function(message_text) {
-            let ajax_options = {
-                type: 'GET',
-                url: 'api/echo/' + message_text,
-                accepts: 'application/json',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    'word': post
-                })
+                data: JSON.stringify(post)
             };
             $.ajax(ajax_options)
             .done(function(data) {
@@ -84,8 +61,7 @@ ns.view = (function() {
         reset: function() {
             $message_id.val('');
             $name.val('');
-            $post.val('');
-            $name.val('').focus();
+            $post.val('').focus();
         },
         update_editor: function(post) {
             $message_id.val(post.message_id);
@@ -101,7 +77,7 @@ ns.view = (function() {
             // did we get a message array?
             if (message) {
                 for (let i=0, l=message.length; i < l; i++) {
-                    rows += `<tr data-person-id="${message[i].message_id}">
+                    rows += `<tr data-message-id="${message[i].message_id}">
                         <td class="name">${message[i].name}</td>
                         <td class="text_entry">${message[i].text_entry}</td>
                         <td>${message[i].timestamp}</td>
@@ -139,22 +115,9 @@ ns.controller = (function(m, v) {
 
     // Validate input
     function validate(name, message_text) {
-        console.log(name + "----" + message_text)
         return name !== "" && message_text !== "";
     }
-
-    // Create our event handlers
-    $('#done').click(function(e) {
-        let message_text = $post.val();
-
-        e.preventDefault();
-
-        if (validate(message_text)) {
-            model.done(message_text)
-        } else {
-            alert('Problem with word input');
-        }
-    });        
+       
     // Create our event handlers
     $('#create').click(function(e) {
         let message_text = $post.val();
@@ -164,7 +127,7 @@ ns.controller = (function(m, v) {
         if (validate("name", message_text)) {
             model.create({
                 'name': 'default_name',
-                'message_text': message_text,
+                'text_entry': message_text,
             })
         } else {
             alert('Problem with message post input');
@@ -196,8 +159,7 @@ ns.controller = (function(m, v) {
     });
 
     $event_pump.on('model_create_success', function(e, data) {
-        view.build_table(data);
-        view.reset();
+        model.read();
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {

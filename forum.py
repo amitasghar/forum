@@ -39,8 +39,5 @@ def create(post):
 
     return data, 201
 
-def echo(word):
-    return {'msg': word}, 200    
-
 def health():
     return {'msg': 'ok'}, 200    

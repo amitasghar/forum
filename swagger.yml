@@ -12,24 +12,6 @@ basePath: /api
 
 # Paths supported by the server application
 paths:
-  /echo/{word}:
-    get:
-      operationId: forum.echo
-      tags:
-        - forum
-      summary: return the text that is passed
-      description: echo text
-      parameters:
-        - name: word
-          in: path
-          type: string
-          description: input word
-          required: true
-      responses:
-        200:
-          description: echo the word
-          schema:
-            type: string
   /message:
     get:
       operationId: forum.read_all
