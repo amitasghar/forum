@@ -28,6 +28,21 @@ ns.model = (function() {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         },     
+        'read_by_user': function(findname) {
+            let ajax_options = {
+                type: 'GET',
+                url: `api/message/${findname}`,
+                accepts: 'application/json',
+                dataType: 'json'
+            };
+            $.ajax(ajax_options)
+            .done(function(data) {
+                $event_pump.trigger('user_model_read_success', [data]);
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
+            })
+        },          
         create: function(post) {
             let ajax_options = {
                 type: 'POST',
@@ -54,7 +69,7 @@ ns.view = (function() {
 
     let $message_id = $('#message_id'),
         $name = $('#name'),
-        $post = $('#post');   
+        $post = $('#post');
 
     // return the API
     return {
@@ -83,9 +98,28 @@ ns.view = (function() {
                         <td>${message[i].timestamp}</td>
                     </tr>`;
                 }
-                $('table > tbody').append(rows);
+                $(rows).appendTo($("#all_messages_table"));
             }
         },
+        build_table_by_user: function(message) {            
+            let rows = ''
+
+            // clear the table
+            $('.message_by_user table > tbody').empty();
+
+            // did we get a message array?
+            if (message) {
+                for (let i=0, l=message.length; i < l; i++) {
+                    rows += `<tr data-message-id="${message[i].message_id}">
+                        <td class="name">${message[i].name}</td>
+                        <td class="text_entry">${message[i].text_entry}</td>
+                        <td>${message[i].timestamp}</td>
+                    </tr>`;
+                }
+                //$('table > tbody').append(rows);
+                $(rows).appendTo($("#user_messages_table"));
+            }
+        },       
         error: function(error_msg) {
             $('.error')
                 .text(error_msg)
@@ -106,7 +140,9 @@ ns.controller = (function(m, v) {
         $event_pump = $('body'),
         $message_id = $('#message_id'),
         $name = $('#name'),
+        $findname = $('#findname'),
         $post = $('#post');
+
 
     // Get the data from the model after the controller is done initializing
     setTimeout(function() {
@@ -116,6 +152,9 @@ ns.controller = (function(m, v) {
     // Validate input
     function validate(name, message_text) {
         return name !== "" && message_text !== "";
+    }
+    function validate(name) {
+        return name !== "";
     }
        
     // Create our event handlers
@@ -134,6 +173,18 @@ ns.controller = (function(m, v) {
             alert('Problem with message post input');
         }        
     });
+
+    $('#find').click(function(e) {
+        let findname = $findname.val();
+
+        e.preventDefault();
+
+        if (validate(findname)) {
+            model.read_by_user(findname);
+        } else {
+            alert('Problem with user find input');
+        }        
+    });    
 
     $('#reset').click(function() {
         view.reset();
@@ -158,14 +209,17 @@ ns.controller = (function(m, v) {
         view.build_table(data);
         view.reset();
     });
-
+    $event_pump.on('user_model_read_success', function(e, data) {
+        view.build_table_by_user(data);
+        view.reset();
+    });
     $event_pump.on('model_create_success', function(e, data) {
         model.read();
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {
         let error_msg = textStatus + ': ' + errorThrown + ' - ' + xhr.responseJSON.detail;
-        view.error(error_msg);
+        view.error(error_msg);``
         console.log(error_msg);
     })
 }(ns.model, ns.view));
