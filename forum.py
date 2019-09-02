@@ -9,13 +9,27 @@ def read_all():
     with the complete lists of messages
     :return:        json string of list of messages
     """
-    # Create the list of people from our data
+    # Create the list of messages from our data
     message = Message.query.order_by(Message.name).all()
 
     # Serialize the data for the response
     message_schema = MessageSchema(many=True)
     data = message_schema.dump(message)
     return data
+
+def read_by_user(name):
+    """
+    This function responds to a request for /api/message/{name}
+    with the messages by the user
+    :return:        json string of list of messages
+    """
+    # Create the list of messages from our data
+    message = Message.query.filter(Message.name == name).all()
+
+    # Serialize the data for the response
+    message_schema = MessageSchema(many=True)
+    data = message_schema.dump(message)
+    return data    
 
 def create(post):
     """

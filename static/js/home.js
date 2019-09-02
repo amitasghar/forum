@@ -125,7 +125,7 @@ ns.controller = (function(m, v) {
 
         e.preventDefault();
 
-        if (validate("name", message_text)) {
+        if (validate(username, message_text)) {
             model.create({
                 'name': username,
                 'text_entry': message_text,
