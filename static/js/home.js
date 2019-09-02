@@ -120,13 +120,14 @@ ns.controller = (function(m, v) {
        
     // Create our event handlers
     $('#create').click(function(e) {
+        let username = $name.val();
         let message_text = $post.val();
 
         e.preventDefault();
 
         if (validate("name", message_text)) {
             model.create({
-                'name': 'default_name',
+                'name': username,
                 'text_entry': message_text,
             })
         } else {
