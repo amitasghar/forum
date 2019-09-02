@@ -37,7 +37,8 @@ paths:
                   description: Content of message
                 timestamp:
                   type: string
-                  description: Creation timestamp of the message
+                  description: Creation timestamp of the message    
+
     post:
       operationId: forum.create
       tags:
@@ -75,6 +76,38 @@ paths:
               timestamp:
                 type: string
                 description: Creation/Update timestamp of the post
+
+  /message/{name}:
+    get:
+      operationId: forum.read_by_user
+      tags:
+        - forum
+      summary: Read messages from specified user
+      description: Read messages from specified user
+      parameters:
+        - name: name
+          in: path
+          description: name of the person whose messages we want to return
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read messages of the person specified
+          schema:
+            properties:
+              message_id:
+                type: string
+                description: Id of the message
+              name:
+                type: string
+                description: name of the person
+              text_entry:
+                type: string
+                description: Content of message
+              timestamp:
+                type: string
+                description: Creation timestamp of the message    
+
   /health:
     get:
       tags: [Health]

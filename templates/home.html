@@ -13,18 +13,20 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="banner">Forum Page</h1>
+        <h1 class="banner">Roteit</h1>
         <div class="section editor">
             <input id="message_id" type="hidden" value="" />
-            <input id="name" type="hidden" value="" />
-            <label for="post">Text
+            <label for="name">Name
+                    <input id="name" type="text" />
+                </label>            
+            <label for="post">Message
                 <input id="post" type="text" />
             </label>
             <button id="create">Post</button>
         </div>
         <div class="message">
             <table>
-                <caption>Forum Posts</caption>
+                <caption>All Forum Posts</caption>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -32,10 +34,32 @@
                         <th>Update Time</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="all_messages_table">
                 </tbody>
             </table>
+        </div> 
+        <br>
+        <div class="section editor">
+            <input id="message_id" type="hidden" value="" />
+            <label for="findname">Name
+                    <input id="findname" type="text" />
+            </label>            
+            <button id="find">Find</button>
         </div>        
+        <div class="message_by_user">
+            <table>
+                <caption>Forum Posts by User</caption>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Post</th>
+                        <th>Update Time</th>
+                    </tr>
+                </thead>
+                <tbody id="user_messages_table">
+                </tbody>
+            </table>
+        </div>                  
         <div class="error">
         </div>
     </div>
