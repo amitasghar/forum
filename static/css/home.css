@@ -72,14 +72,24 @@
      height: 33px;
  }
  
+ /*
  tr:nth-child(even) {
      background-color: #f0f0f0
  }
+*/
 
-.reply {
-    background-color: #24a82f 
+ .rootMessage
+ {
+    background-color: #b0f0b6 
  }
- 
+
+ .replyMessage td
+ {
+    background-color: #96bbb7;
+    position: relative;  
+    left: 60px;  
+ }
+
  td {
      text-align: center;
  }

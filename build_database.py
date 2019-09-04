@@ -11,6 +11,7 @@ MESSAGE = [
     {"parent_id" : 0, "name": "leia", "text_entry": "scruffy looking"},
     {"parent_id" : 1, "name": "leia", "text_entry": "nerf herder"},
     {"parent_id" : 1, "name": "luke", "text_entry": "here to rescue you"},
+    {"parent_id" : 2, "name": "luke", "text_entry": "ben"},
 ]
 
 # Delete database file if it exists currently

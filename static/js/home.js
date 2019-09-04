@@ -108,7 +108,7 @@ ns.view = (function() {
                 }
                 var index = 0;
                 for (let i=0, l=root_message.length; i < l; i++) {
-                    sorted_message[index] = root_message[index];
+                    sorted_message[index] = root_message[i];
                     index++;
                     for (let j=0, l=reply_message.length; j < l; j++) {   
                         if (reply_message[j].parent_id == root_message[i].message_id) {
@@ -117,8 +117,11 @@ ns.view = (function() {
                         }
                     }
                 }
+                var messageType = "rootMessage";
                 for (let i=0, l=sorted_message.length; i < l; i++) {
-                    rows += `<tr data-message-id="${sorted_message[i].message_id}">
+                    if (sorted_message[i].parent_id != 0) messageType = "replyMessage";
+                    else  messageType = "rootMessage"
+                    rows += `<tr data-message-id="${sorted_message[i].message_id}" class=${messageType}>
                         <td class="name">${sorted_message[i].name}</td>
                         <td class="text_entry">${sorted_message[i].text_entry}</td>
                         <td>${sorted_message[i].timestamp}</td>
