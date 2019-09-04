@@ -75,6 +75,10 @@
  tr:nth-child(even) {
      background-color: #f0f0f0
  }
+
+.reply {
+    background-color: #24a82f 
+ }
  
  td {
      text-align: center;

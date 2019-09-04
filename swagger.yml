@@ -11,6 +11,7 @@ produces:
 basePath: /api
 
 # Paths supported by the server application
+
 paths:
   /message:
     get:
@@ -53,6 +54,9 @@ paths:
           schema:
             type: object
             properties:
+              parent_id:
+                type: integer
+                description: id of post being replied to (optional)            
               name:
                 type: string
                 description: name of person

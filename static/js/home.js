@@ -91,12 +91,39 @@ ns.view = (function() {
 
             // did we get a message array?
             if (message) {
+                // Sort messages so that replies follow the root message
+                var root_message = [];
+                var reply_message = [];
+                var sorted_message = [];
+                var j = 0;
+                var k = 0;
                 for (let i=0, l=message.length; i < l; i++) {
-                    rows += `<tr data-message-id="${message[i].message_id}">
-                        <td class="name">${message[i].name}</td>
-                        <td class="text_entry">${message[i].text_entry}</td>
-                        <td>${message[i].timestamp}</td>
-                    </tr>`;
+                    if (message[i].parent_id == 0) {
+                        root_message[j]=message[i];
+                        j++;
+                    } else {
+                        reply_message[k]=message[i];
+                        k++;
+                    }
+                }
+                var index = 0;
+                for (let i=0, l=root_message.length; i < l; i++) {
+                    sorted_message[index] = root_message[index];
+                    index++;
+                    for (let j=0, l=reply_message.length; j < l; j++) {   
+                        if (reply_message[j].parent_id == root_message[i].message_id) {
+                            sorted_message[index] = reply_message[j];
+                            index++;
+                        }
+                    }
+                }
+                for (let i=0, l=sorted_message.length; i < l; i++) {
+                    rows += `<tr data-message-id="${sorted_message[i].message_id}">
+                        <td class="name">${sorted_message[i].name}</td>
+                        <td class="text_entry">${sorted_message[i].text_entry}</td>
+                        <td>${sorted_message[i].timestamp}</td>
+                        <td>Reply</td>
+                    </tr>`; 
                 }
                 $(rows).appendTo($("#all_messages_table"));
             }
