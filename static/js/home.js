@@ -175,7 +175,7 @@ ns.controller = (function(m, v) {
     }, 100)        
 
     // Validate input
-    function validate(name, message_text) {
+    function validate_post(name, message_text) {
         return name !== "" && message_text !== "";
     }
     function validate(name) {
@@ -190,7 +190,7 @@ ns.controller = (function(m, v) {
 
         e.preventDefault();
 
-        if (validate(username, message_text)) {
+        if (validate_post(username, message_text)) {
             model.create({
                 'name': username,
                 'parent_id': parent_id,
@@ -209,7 +209,7 @@ ns.controller = (function(m, v) {
 
         e.preventDefault();
 
-        if (validate(username, message_text)) {
+        if (validate_post(username, message_text)) {
             model.create({
                 'name': username,
                 'parent_id': parent_id,
