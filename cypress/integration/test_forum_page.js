@@ -4,6 +4,7 @@ describe('test forum webpage', function () {
   it('enter word and verify word is output to a table', function () {
     cy.visit('http://localhost:5000')
     cy.get('#name').type("tester")
+    cy.wait(delay)
     var randomNum = Math.floor(Math.random() * 1000000)
     cy.get('#post').type("abcd" + randomNum + "#$%!")
     cy.wait(delay)
@@ -73,5 +74,52 @@ describe('test forum webpage', function () {
     cy.get('.message_by_user > table').contains('td', "abcd" + randomNum + "#$%!");
     cy.get('.message_by_user > table').contains('td', "efgh" + randomNum + "#$%!");
   })
+
+  it('reply to a message', function () {
+    cy.visit('http://localhost:5000')
+    cy.get('[data-message-id="3"] > .rootMessage_btn > button').click()
+    cy.wait(delay)
+    cy.get('#name_reply').type("tester")
+    cy.wait(delay)
+    var randomNum = Math.floor(Math.random() * 1000000)
+    cy.get('#post_reply').type("abcd" + randomNum + "#$%!")
+    cy.wait(delay)
+
+    cy.get('#create_reply').click()
+    cy.wait(delay)
+
+    cy.get('.message > table').contains('td', "abcd" + randomNum + "#$%!");
+  })
+
+  it('reply with an empty message', function () {
+    cy.visit('http://localhost:5000')
+    cy.get('[data-message-id="3"] > .rootMessage_btn > button').click()
+    cy.wait(delay)
+    cy.get('#name_reply').type("tester")
+
+    cy.wait(delay)
+    const stub = cy.stub()
+    cy.on('window:alert', stub)
+    cy.get('#create_reply').click()
+      .then(() => {
+        expect(stub.getCall(0)).to.be.calledWith('Problem with message post input')
+      })
+  })
+
+  it('reply with an empty name', function () {
+    cy.visit('http://localhost:5000')
+    cy.get('[data-message-id="3"] > .rootMessage_btn > button').click()
+    cy.wait(delay)
+    cy.get('#post_reply').type("blah blah reply message")
+
+    cy.wait(delay)
+    const stub = cy.stub()
+    cy.on('window:alert', stub)
+    cy.get('#create_reply').click()
+      .then(() => {
+        expect(stub.getCall(0)).to.be.calledWith('Problem with message post input')
+      })
+  })  
+
 
 })
