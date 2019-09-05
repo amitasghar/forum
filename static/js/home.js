@@ -67,22 +67,15 @@ ns.model = (function() {
 ns.view = (function() {
     'use strict';
 
-    let $message_id = $('#message_id'),
-        $name = $('#name'),
-        $post = $('#post');
-
     // return the API
     return {
         reset: function() {
             $message_id.val('');
             $name.val('');
             $post.val('').focus();
-        },
-        update_editor: function(post) {
-            $message_id.val(post.message_id);
-            $name.val(post.name);            
-            $message_text.val(post.message_text).focus();
-        },
+            $name_reply.val('');
+            $post_reply.val('').focus();            
+        },        
         build_table: function(message) {            
             let rows = ''
 
@@ -125,8 +118,8 @@ ns.view = (function() {
                         <td class="name">${sorted_message[i].name}</td>
                         <td class="text_entry">${sorted_message[i].text_entry}</td>
                         <td>${sorted_message[i].timestamp}</td>
-                        <td>Reply</td>
-                    </tr>`; 
+                        <td class=${messageType+"_btn"}><button onclick="openForm(${sorted_message[i].message_id})">Reply</button></td>
+                    </tr>`;
                 }
                 $(rows).appendTo($("#all_messages_table"));
             }
@@ -169,9 +162,12 @@ ns.controller = (function(m, v) {
         view = v,
         $event_pump = $('body'),
         $message_id = $('#message_id'),
+        $parent_id = $('#parent_id'),
         $name = $('#name'),
+        $name_reply = $('#name_reply'),
         $findname = $('#findname'),
-        $post = $('#post');
+        $post = $('#post'),
+        $post_reply = $('#post_reply');
 
 
     // Get the data from the model after the controller is done initializing
@@ -191,18 +187,39 @@ ns.controller = (function(m, v) {
     $('#create').click(function(e) {
         let username = $name.val();
         let message_text = $post.val();
+        let parent_id = parseInt($parent_id.val());
 
         e.preventDefault();
 
         if (validate(username, message_text)) {
             model.create({
                 'name': username,
+                'parent_id': parent_id,
                 'text_entry': message_text,
             })
         } else {
             alert('Problem with message post input');
         }        
     });
+
+    // Create our event handlers
+    $('#create_reply').click(function(e) {
+        let username = $name_reply.val();
+        let message_text = $post_reply.val();
+        let parent_id = parseInt($parent_id.val());
+
+        e.preventDefault();
+
+        if (validate(username, message_text)) {
+            model.create({
+                'name': username,
+                'parent_id': parent_id,
+                'text_entry': message_text,
+            })
+        } else {
+            alert('Problem with message post input');
+        }        
+    });    
 
     $('#find').click(function(e) {
         let findname = $findname.val();
@@ -216,24 +233,6 @@ ns.controller = (function(m, v) {
         }        
     });    
 
-    $('#reset').click(function() {
-        view.reset();
-    })
-
-    $('table > tbody').on('dblclick', 'tr', function(e) {
-        let $target = $(e.target),
-            message_id,
-            name,
-            text_entry;
-
-        name = $target
-            .parent()
-            .find('td.fname')
-            .text();
-
-        view.update_editor(name);
-    });
-
     // Handle the model events
     $event_pump.on('model_read_success', function(e, data) {
         view.build_table(data);
@@ -245,6 +244,7 @@ ns.controller = (function(m, v) {
     });
     $event_pump.on('model_create_success', function(e, data) {
         model.read();
+        view.reset();
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {
@@ -253,3 +253,14 @@ ns.controller = (function(m, v) {
         console.log(error_msg);
     })
 }(ns.model, ns.view));
+
+function openForm(id) {
+    document.getElementById('name_reply').value = "";
+    document.getElementById('post_reply').value = "";
+    document.getElementById('parent_id').value = id;
+    document.getElementById("reply").style.display = "block";
+}
+  
+function closeForm() {
+    document.getElementById("reply").style.display = "none";
+}
