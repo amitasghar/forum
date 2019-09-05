@@ -67,14 +67,14 @@ ns.model = (function() {
 ns.view = (function() {
     'use strict';
 
+    let $name = $('#name'),
+    $post = $('#post');
+
     // return the API
     return {
         reset: function() {
-            $message_id.val('');
             $name.val('');
             $post.val('').focus();
-            $name_reply.val('');
-            $post_reply.val('').focus();            
         },        
         build_table: function(message) {            
             let rows = ''
@@ -161,7 +161,6 @@ ns.controller = (function(m, v) {
     let model = m,
         view = v,
         $event_pump = $('body'),
-        $message_id = $('#message_id'),
         $parent_id = $('#parent_id'),
         $name = $('#name'),
         $name_reply = $('#name_reply'),
@@ -187,7 +186,7 @@ ns.controller = (function(m, v) {
     $('#create').click(function(e) {
         let username = $name.val();
         let message_text = $post.val();
-        let parent_id = parseInt($parent_id.val());
+        let parent_id = 0;
 
         e.preventDefault();
 
@@ -236,11 +235,9 @@ ns.controller = (function(m, v) {
     // Handle the model events
     $event_pump.on('model_read_success', function(e, data) {
         view.build_table(data);
-        view.reset();
     });
     $event_pump.on('user_model_read_success', function(e, data) {
         view.build_table_by_user(data);
-        view.reset();
     });
     $event_pump.on('model_create_success', function(e, data) {
         model.read();
