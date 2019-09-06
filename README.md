@@ -1,3 +1,5 @@
+![GitHub Logo](/images/roteit.jpg)
+
 # Roteit
 A forum where you can post and reply to comments. Location/weather is captured along with comments.
 
