@@ -37,8 +37,6 @@ def create(post):
     :param post:  post containing user name and message
     :return:        201 on success
     """
-    #name = "default_user" # hardcode user name for now
-    #text = post.get("text_entry")
 
     # Create a message instance using the schema and the passed in post
     schema = MessageSchema()
@@ -51,7 +49,7 @@ def create(post):
     # Serialize and return the newly created post in the response
     data = schema.dump(new_post)
 
-    return data, 201
+    return data, 201  
 
 def health():
     return {'msg': 'ok'}, 200    

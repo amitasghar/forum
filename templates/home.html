@@ -16,6 +16,7 @@
         <h1 class="banner">Roteit</h1>
         <div class="section editor">
             <input id="message_id" type="hidden" value="" />
+            <input id="parent_id" type="hidden" value="0" />
             <label for="name">Name
                     <input id="name" type="text" />
                 </label>            
@@ -32,6 +33,7 @@
                         <th>Name</th>
                         <th>Post</th>
                         <th>Update Time</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="all_messages_table">
@@ -62,6 +64,19 @@
         </div>                  
         <div class="error">
         </div>
+    </div>
+    <div class="reply-popup" id="reply">
+        <h1>Reply</h1>
+        <input id="message_id" type="hidden" value="" />
+        <input id="parent_id" type="hidden" value="0" />
+        <label for="name">Name
+                <input id="name_reply" type="text" />
+            </label>            
+        <label for="post">Message
+            <input id="post_reply" type="text" />
+        </label>
+        <button id="create_reply" class="btn" onclick="closeForm()">Reply</button>
+        <button class="btn cancel" onclick="closeForm()">Close</button>
     </div>
 </body>
 <script src="static/js/home.js"></script>
