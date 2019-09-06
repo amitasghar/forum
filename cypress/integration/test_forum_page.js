@@ -121,7 +121,7 @@ describe('test forum webpage', function () {
       })
   })  
 
-  it('enter city and verify weather info', function () {
+  it('enter city and verify city got added', function () {
     cy.visit('http://localhost:5000')
     cy.get('#name').type("tester")
     cy.wait(delay)
@@ -136,4 +136,37 @@ describe('test forum webpage', function () {
     cy.get('.message > table').contains('td', "abcd");
     cy.get('.message > table').contains('td', "vancouver");
   })
+
+  it('enter incorrect city and verify city got added', function () {
+    cy.visit('http://localhost:5000')
+    cy.get('#name').type("tester")
+    cy.wait(delay)
+    cy.get('#post').type("abcd")
+    cy.wait(delay)
+    cy.get('#location').type("abcdf")
+    cy.wait(delay)    
+
+    cy.get('#create').click()
+    cy.wait(delay)
+
+    cy.get('.message > table').contains('td', "abcd");
+    cy.get('.message > table').contains('td', "abcdf");
+  })  
+
+  it('reply to a message with city', function () {
+    cy.visit('http://localhost:5000')
+    cy.get('[data-message-id="3"] > .rootMessage_btn > button').click()
+    cy.wait(delay)
+    cy.get('#name_reply').type("tester")
+    cy.wait(delay)
+    cy.get('#post_reply').type("abcd")
+    cy.wait(delay)
+    cy.get('#location_reply').type("abcdefgh")
+    cy.wait(delay)    
+
+    cy.get('#create_reply').click()
+    cy.wait(delay)
+
+    cy.get('.message > table').contains('td', "abcdefgh");
+  })  
 })
