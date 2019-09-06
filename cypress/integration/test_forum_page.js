@@ -121,5 +121,19 @@ describe('test forum webpage', function () {
       })
   })  
 
+  it('enter city and verify weather info', function () {
+    cy.visit('http://localhost:5000')
+    cy.get('#name').type("tester")
+    cy.wait(delay)
+    cy.get('#post').type("abcd")
+    cy.wait(delay)
+    cy.get('#location').type("vancouver")
+    cy.wait(delay)    
 
+    cy.get('#create').click()
+    cy.wait(delay)
+
+    cy.get('.message > table').contains('td', "abcd");
+    cy.get('.message > table').contains('td', "vancouver");
+  })
 })
