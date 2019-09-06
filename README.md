@@ -16,6 +16,12 @@ pip install Flask-SQLAlchemy==2.1
 pip show Flask-SQLAlchemy
 ```
 
+#### weather API library
+```
+pip install pyowm
+```
+Documentation - https://pyowm.readthedocs.io/en/latest/usage-examples-v2/weather-api-usage-examples.html
+
 ## Testing
 
 runtests.bat - execute Cypress test
