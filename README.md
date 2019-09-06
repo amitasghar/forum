@@ -1,4 +1,5 @@
-# forum
+# Roteit
+A forum where you can post and reply to comments. Location/weather is captured along with comments.
 
 A REST API implemented with python flask framework 
 
