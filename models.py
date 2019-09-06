@@ -8,6 +8,10 @@ class Message(db.Model):
     parent_id = db.Column(db.Integer)
     name = db.Column(db.String(32))
     text_entry = db.Column(db.String)
+    location = db.Column(db.String)
+    temparature = db.Column(db.String)
+    lattitude = db.Column(db.String)
+    longtitude = db.Column(db.String)
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow)  
 

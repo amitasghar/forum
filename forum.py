@@ -2,6 +2,7 @@
 from flask import make_response, abort
 from config import db
 from models import Message, MessageSchema
+import weather 
 
 def read_all():
     """
@@ -10,7 +11,7 @@ def read_all():
     :return:        json string of list of messages
     """
     # Create the list of messages from our data
-    message = Message.query.order_by(Message.name).all()
+    message = Message.query.order_by(Message.timestamp).all()
 
     # Serialize the data for the response
     message_schema = MessageSchema(many=True)
@@ -38,6 +39,22 @@ def create(post):
     :return:        201 on success
     """
 
+    location = post['location']
+    if location != "":
+        weather_data = weather.getWeather(location)
+        temp = str(weather_data['temparature'])
+        lat = str(weather_data['lattitude'])
+        lon = str(weather_data['longtitude'])        
+    else:
+        temp = ""
+        lat = ""
+        lon = ""
+
+    post['location'] = location
+    post['temparature'] = temp
+    post['lattitude'] = lat
+    post['longtitude'] = lon
+      
     # Create a message instance using the schema and the passed in post
     schema = MessageSchema()
     new_post = schema.load(post, session=db.session)

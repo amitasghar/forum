@@ -68,13 +68,15 @@ ns.view = (function() {
     'use strict';
 
     let $name = $('#name'),
-    $post = $('#post');
+    $post = $('#post'),
+    $location = $('#location');
 
     // return the API
     return {
         reset: function() {
             $name.val('');
             $post.val('').focus();
+            $location.val('');
         },        
         build_table: function(message) {            
             let rows = ''
@@ -118,6 +120,10 @@ ns.view = (function() {
                         <td class="name">${sorted_message[i].name}</td>
                         <td class="text_entry">${sorted_message[i].text_entry}</td>
                         <td>${sorted_message[i].timestamp}</td>
+                        <td>${sorted_message[i].location}</td>
+                        <td>${sorted_message[i].temparature}</td>
+                        <td>${sorted_message[i].lattitude}</td>
+                        <td>${sorted_message[i].longtitude}</td>
                         <td class=${messageType+"_btn"}><button onclick="openForm(${sorted_message[i].message_id})">Reply</button></td>
                     </tr>`;
                 }
@@ -166,7 +172,9 @@ ns.controller = (function(m, v) {
         $name_reply = $('#name_reply'),
         $findname = $('#findname'),
         $post = $('#post'),
-        $post_reply = $('#post_reply');
+        $post_reply = $('#post_reply'),
+        $location = $('#location'),
+        $location_reply = $('#location_reply');
 
 
     // Get the data from the model after the controller is done initializing
@@ -186,6 +194,7 @@ ns.controller = (function(m, v) {
     $('#create').click(function(e) {
         let username = $name.val();
         let message_text = $post.val();
+        let location = $location.val();
         let parent_id = 0;
 
         e.preventDefault();
@@ -195,6 +204,7 @@ ns.controller = (function(m, v) {
                 'name': username,
                 'parent_id': parent_id,
                 'text_entry': message_text,
+                'location': location,
             })
         } else {
             alert('Problem with message post input');
@@ -205,6 +215,8 @@ ns.controller = (function(m, v) {
     $('#create_reply').click(function(e) {
         let username = $name_reply.val();
         let message_text = $post_reply.val();
+        let location = $location_reply.val();
+        console.log("loc" + location)
         let parent_id = parseInt($parent_id.val());
 
         e.preventDefault();
@@ -214,6 +226,7 @@ ns.controller = (function(m, v) {
                 'name': username,
                 'parent_id': parent_id,
                 'text_entry': message_text,
+                'location': location,
             })
         } else {
             alert('Problem with message post input');
@@ -254,6 +267,7 @@ ns.controller = (function(m, v) {
 function openForm(id) {
     document.getElementById('name_reply').value = "";
     document.getElementById('post_reply').value = "";
+    document.getElementById('location_reply').value = "";
     document.getElementById('parent_id').value = id;
     document.getElementById("reply").style.display = "block";
 }
