@@ -1,4 +1,4 @@
-![Roteit](roteit.jpg)
+![Roteit](roteit.JPG)
 
 # Roteit
 A forum where you can post and reply to comments. Location/weather is captured along with comments.
