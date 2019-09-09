@@ -27,7 +27,7 @@ pip install pyowm
 ```
 Documentation - https://pyowm.readthedocs.io/en/latest/usage-examples-v2/weather-api-usage-examples.html
 
-#### Add support for adhoc certificates tu enable https
+#### Add support for adhoc certificates to` enable https
 ```
 pip install pyopenssl
 ```
