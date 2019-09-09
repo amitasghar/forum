@@ -27,6 +27,11 @@ pip install pyowm
 ```
 Documentation - https://pyowm.readthedocs.io/en/latest/usage-examples-v2/weather-api-usage-examples.html
 
+Add support for adhoc certificates tu enable https
+```
+pip install pyopenssl
+```
+
 ## Testing
 
 runtests.bat - execute Cypress test
