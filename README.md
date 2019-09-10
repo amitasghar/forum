@@ -37,7 +37,11 @@ pip install pyopenssl
 ```
 ## Running on local
 
-After all libs have been installed, execute run.bat (Windows)
+After all libs have been installed
+```
+python build_database.py
+run 
+```
 
 ## Testing
 
