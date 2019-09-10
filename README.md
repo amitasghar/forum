@@ -35,6 +35,9 @@ Documentation - https://pyowm.readthedocs.io/en/latest/usage-examples-v2/weather
 ```
 pip install pyopenssl
 ```
+## Running on local
+
+After all libs have been installed, execute run.bat (Windows)
 
 ## Testing
 
