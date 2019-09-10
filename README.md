@@ -8,7 +8,11 @@ A REST API implemented with python flask framework
 
 ## Install libraries
 
-TODO: add other libs that are needed
+Connexion module allows a Python program to use the Swagger specification
+```
+pip install connexion
+```
+Add SQLAlchemy for ORM and Marshmallow for serialzation of Python objects
 ```
 pip install Flask-SQLAlchemy flask-marshmallow marshmallow-sqlalchemy marshmallow
 ```
