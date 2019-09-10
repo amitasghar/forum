@@ -42,6 +42,9 @@ After all libs have been installed
 python build_database.py
 run 
 ```
+## Documentation
+Swagger docs for API:
+http://localhost:5000/api/ui/
 
 ## Testing
 
